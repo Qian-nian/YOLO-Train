@@ -19,8 +19,8 @@ def extract_log(log_file,new_log_file,key_word):
             continue
           if key_word in line:
             train_log.write(line)
-    f.close()
-    train_log.close()
+    #f.close()
+    #train_log.close()
  
 extract_log('train_yolov3.log','train_log_loss.txt','images')
 extract_log('train_yolov3.log','train_log_iou.txt','IOU')
