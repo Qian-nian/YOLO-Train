@@ -1,0 +1,55 @@
+'''
+import os
+import os.path
+rootdir = "F:\素材\1月24日"
+
+file_obj = open('train-list.txt','w')
+print(os.walk(rootdir))
+
+for parent,dirnames,filenames in os.walk(rootdir):
+    for filename in filenames:
+        print(filename)
+        file_obj.write(filename+'\n')
+
+file_obj.close()
+'''
+
+import os
+from shutil import copyfile
+
+def FilesToText(rootdir,file,wildcard,recursion):
+    exts = wildcard.split(' ')
+    files = os.listdir(rootdir)
+    for i in range(len(files)):
+        fullname = os.path.join(rootdir,files[i])
+        if(os.path.isdir(fullname) & recursion):
+            FilesToText(fullname,file,wildcard,recursion)
+        else:
+            for ext in exts:
+                if(files[i].endswith(ext)):
+                    #copyfile(fullname,'/home/z840/tensorflow_mode/YOLO/darknet/traindata/'+files[i])
+                    #CopyAnno(files[i])
+                    file.write(fullname+'\n')
+                    #break
+
+def Test():
+    #rootdir = '/home/z840/tensorflow_mode/tf-faster-rcnn-r1.0/data/VOCdevkit2007/VOC2007/JPEGImages'
+    rootdir = '/home/z840/tensorflow_mode/YOLO/darknet/dataset'
+    outfile = '/home/z840/tensorflow_mode/YOLO/darknet/data/train-list.txt'
+    wildcard = '.jpg .JPG'
+
+    file_obj = open(outfile,'w')
+    if not file_obj:
+        print('cannot open the file %s for writing' % outfile)
+
+    FilesToText(rootdir,file_obj,wildcard,1)
+
+    file_obj.close()
+
+def CopyAnno(copyname):
+    xmlname = copyname.split('.')[0] + '.xml'
+    srcname = '/home/z840/tensorflow_mode/tf-faster-rcnn-r1.0/data/VOCdevkit2007/VOC2007/Annotations/' + xmlname
+    dstname = '/home/z840/tensorflow_mode/YOLO/darknet/xml_val/' + xmlname
+    copyfile(srcname,dstname)
+
+Test()
